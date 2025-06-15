@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Semua Review - SParking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/dashboard">
+                <i class="fas fa-parking text-primary me-2"></i>
+                <span class="fw-bold">SParking</span>
+            </a>
+            <div class="ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <div class="avatar-circle me-2">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        {{ current_user }}
+                    </a>
+                    <ul class="dropdown-menu glass-card">
+                        <li><a class="dropdown-item text-danger" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Background Elements -->
+    <div class="animated-bg">
+        <div class="floating-circle" style="--delay: 0s; --size: 200px; --top: 15%; --left: 10%;"></div>
+        <div class="floating-circle" style="--delay: 2s; --size: 150px; --top: 60%; --left: 80%;"></div>
+        <div class="floating-circle" style="--delay: 4s; --size: 100px; --top: 80%; --left: 25%;"></div>
+        <div class="floating-star" style="--delay: 1s; --size: 20px; --top: 20%; --left: 85%;"></div>
+        <div class="floating-star" style="--delay: 3s; --size: 15px; --top: 70%; --left: 15%;"></div>
+    </div>
+
+    <div class="container mt-4">
+        <h3 class="mb-4">Semua Review Pengguna</h3>
+        {% if reviews %}
+        <div class="list-group">
+            {% for review in reviews %}
+            <div class="glass-card p-4 mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ review[1] }}</strong> - <em>{{ review[2] }}</em>
+                        <div>
+                            <div class="star-rating">
+                                {% for i in range(1, 6) %}
+                                    <i class="fa fa-star {% if i <= review[3] %}active{% endif %}"></i>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if review[1] == current_user %}
+                    <button class="btn btn-sm btn-danger btn-delete-review" data-review-id="{{ review[0] }}">
+                        <i class="fas fa-trash"></i> Hapus
+                    </button>
+                    {% endif %}
+                </div>
+                <p class="mt-2">{{ review[4] }}</p>
+                {% if review[6] %}
+                <div class="alert glass-card" style="background-color: rgba(255, 255, 255, 0.2); color: #fff;">
+                    <strong>Balasan Admin:</strong> {{ review[6] }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>Tidak ada review yang tersedia.</p>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('.btn-delete-review').forEach(button => {
+            button.addEventListener('click', function() {
+                if (!confirm('Yakin ingin menghapus review ini?')) return;
+                const reviewId = this.getAttribute('data-review-id');
+                fetch('/delete_review', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({ review_id: reviewId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                    } else {
+                        alert(data.message);
+                        location.reload();
+                    }
+                })
+                .catch(() => {
+                    alert('Terjadi kesalahan saat menghapus review.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

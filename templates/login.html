@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SParking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container-fluid min-vh-100">
+        <div class="row min-vh-100">
+            <!-- Background Elements -->
+            <div class="animated-bg">
+                <div class="floating-circle" style="--delay: 0s; --size: 200px; --top: 15%; --left: 10%;"></div>
+                <div class="floating-circle" style="--delay: 2s; --size: 150px; --top: 60%; --left: 80%;"></div>
+                <div class="floating-star" style="--delay: 1s; --size: 20px; --top: 20%; --left: 85%;"></div>
+                <div class="floating-star" style="--delay: 3s; --size: 15px; --top: 70%; --left: 15%;"></div>
+            </div>
+
+            <!-- Left Side - Illustration -->
+            <div class="col-lg-6 d-none d-lg-flex position-relative overflow-hidden">
+                <div class="position-absolute top-50 start-50 translate-middle text-center w-75">
+                    <div class="parking-icon animate-hover mb-4">
+                        <i class="fas fa-car-side"></i>
+                    </div>
+                    <h2 class="mb-4">Selamat Datang di SParking</h2>
+                    <p class="text-white-50 lead">Solusi parkir digital terdepan di Palembang</p>
+                </div>
+            </div>
+
+            <!-- Right Side - Login Form -->
+            <div class="col-lg-6 d-flex align-items-center">
+                <div class="w-100 p-4 p-lg-5 glass-card">
+                    <div class="text-center mb-5">
+                        <a href="/" class="text-decoration-none">
+                            <h3 class="text-primary fw-bold mb-0">SParking</h3>
+                        </a>
+                        <p class="text-muted mt-2">Masuk ke akun Anda</p>
+                        <div class="mt-3">
+                            <a href="/public_reviews" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-star me-2"></i>Lihat Review
+                            </a>
+                        </div>
+                    </div>
+
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="alert alert-danger glass-card alert-dismissible fade show" role="alert">
+                                {{ messages[0] }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    <form action="/login" method="POST" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control form-control-lg glass-input" 
+                                   placeholder="Masukkan email" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control form-control-lg glass-input" 
+                                   placeholder="Masukkan password" required>
+                        </div>
+                        <div class="mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                Masuk
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center">
+                        <p class="mb-0">Belum punya akun? <a href="/register" class="text-primary text-decoration-none fw-bold">Daftar</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+</body>
+</html>

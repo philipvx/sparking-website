@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Feedbacks - SParking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/admin">
+                <img src="{{ url_for('static', filename='images/sparking-logo.png') }}" alt="SParking Logo" height="40" class="me-2">
+                <span class="fw-bold">SParking Admin</span>
+            </a>
+            <div class="ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <div class="avatar-circle me-2">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        Admin
+                    </a>
+                    <ul class="dropdown-menu glass-card">
+                        <li><a class="dropdown-item text-danger" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Background Elements -->
+    <div class="animated-bg">
+        <div class="floating-circle" style="--delay: 0s; --size: 200px; --top: 15%; --left: 10%;"></div>
+        <div class="floating-circle" style="--delay: 2s; --size: 150px; --top: 60%; --left: 80%;"></div>
+        <div class="floating-circle" style="--delay: 4s; --size: 100px; --top: 80%; --left: 25%;"></div>
+        <div class="floating-star" style="--delay: 1s; --size: 20px; --top: 20%; --left: 85%;"></div>
+        <div class="floating-star" style="--delay: 3s; --size: 15px; --top: 70%; --left: 15%;"></div>
+    </div>
+
+    <div class="container mt-4">
+        <h3 class="mb-4">User Feedbacks</h3>
+        {% if feedbacks %}
+        <div class="glass-card p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>User Email</th>
+                        <th>Lokasi</th>
+                        <th>Rating</th>
+                        <th>Review</th>
+                        <th>Admin Reply</th>
+                        <th>Created At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fb in feedbacks %}
+                    <tr>
+                        <td>{{ fb[0] }}</td>
+                        <td>{{ fb[1] }}</td>
+                        <td>{{ fb[2] }}</td>
+                        <td>
+                            <div class="star-rating">
+                                {% for i in range(1, 6) %}
+                                    <i class="fa fa-star {% if i <= fb[3] %}active{% endif %}"></i>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td>{{ fb[4] }}</td>
+                        <td>
+                            <form class="replyForm" data-feedback-id="{{ fb[0] }}">
+                                <textarea class="form-control form-control-sm glass-input mb-2" name="admin_reply" rows="2" placeholder="Balas komentar...">{{ fb[6] or '' }}</textarea>
+                                <button type="submit" class="btn btn-sm btn-primary">Kirim Balasan</button>
+                                <div class="replyMessage mt-1"></div>
+                            </form>
+                        </td>
+                        <td>{{ fb[5] }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger btn-delete-review" data-review-id="{{ fb[0] }}">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <p>Tidak ada feedback yang tersedia.</p>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('.replyForm').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const feedbackId = this.getAttribute('data-feedback-id');
+                const adminReply = this.querySelector('textarea[name="admin_reply"]').value;
+                const messageDiv = this.querySelector('.replyMessage');
+
+                fetch('/admin/reply_feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        feedback_id: feedbackId,
+                        admin_reply: adminReply
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        messageDiv.innerHTML = '<div class="alert alert-danger glass-card p-1">' + data.error + '</div>';
+                    } else {
+                        messageDiv.innerHTML = '<div class="alert alert-success glass-card p-1">' + data.message + '</div>';
+                    }
+                })
+                .catch(() => {
+                    messageDiv.innerHTML = '<div class="alert alert-danger glass-card p-1">Terjadi kesalahan saat mengirim balasan.</div>';
+                });
+            });
+        });
+    </script>
+    <script>
+        document.querySelectorAll('.btn-delete-review').forEach(button => {
+            button.addEventListener('click', function() {
+                if (!confirm('Yakin ingin menghapus review ini?')) return;
+                const reviewId = this.getAttribute('data-review-id');
+                fetch('/delete_review', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({ review_id: reviewId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                    } else {
+                        alert(data.message);
+                        location.reload();
+                    }
+                })
+                .catch(() => {
+                    alert('Terjadi kesalahan saat menghapus review.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

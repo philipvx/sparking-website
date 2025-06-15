@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SParking - Smart Parking Solution</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='1.1') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="fas fa-car-side text-primary me-2" style="font-size: 24px;"></i>
+                <span class="fw-bold">SParking</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Fitur</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#locations">Lokasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/public_reviews">Review</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Masuk</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary px-3" href="/register">Daftar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero-section position-relative overflow-hidden">
+        <!-- Animated Background -->
+        <div class="animated-bg">
+            <div class="floating-circle" style="--delay: 0s; --size: 200px; --top: 15%; --left: 10%;"></div>
+            <div class="floating-circle" style="--delay: 2s; --size: 150px; --top: 60%; --left: 80%;"></div>
+            <div class="floating-circle" style="--delay: 4s; --size: 100px; --top: 80%; --left: 25%;"></div>
+            <div class="floating-star" style="--delay: 1s; --size: 20px; --top: 20%; --left: 85%;"></div>
+            <div class="floating-star" style="--delay: 3s; --size: 15px; --top: 70%; --left: 15%;"></div>
+            <div class="floating-star" style="--delay: 5s; --size: 25px; --top: 40%; --left: 50%;"></div>
+        </div>
+
+        <div class="container h-100">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6 pe-lg-5">
+                    <div class="hero-content">
+                        <h1 class="display-4 fw-bold mb-4 animate-fade-in">
+                            Smart Parking<br>Made Easy
+                        </h1>
+                        <p class="lead mb-5 text-white-50 animate-fade-in" style="--delay: 0.2s">
+                            Temukan dan pesan tempat parkir dengan mudah di seluruh Palembang. 
+                            Hemat waktu, hindari stress parkir!
+                        </p>
+                        <div class="d-flex gap-3 animate-fade-in" style="--delay: 0.4s">
+                            <a href="/login" class="btn btn-primary">
+                                <i class="fas fa-car me-2"></i>
+                                Book Now
+                            </a>
+                            <a href="#features" class="btn btn-outline-light">
+                                Learn More
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="parking-illustration animate-fade-in" style="--delay: 0.6s">
+                        <div class="glass-card text-center p-5">
+                            <div class="parking-demo-container">
+                                <h5 class="text-white mb-4">Live Parking Demo</h5>
+                                
+                                <!-- Parking Lot Visualization -->
+                                <div class="parking-lot-grid mb-4">
+                                    <div class="parking-row">
+                                        <div class="parking-spot occupied">
+                                            <i class="fas fa-car"></i>
+                                            <span class="spot-label">A1</span>
+                                        </div>
+                                        <div class="parking-spot available animate-pulse" style="--delay: 0.2s">
+                                            <i class="fas fa-square"></i>
+                                            <span class="spot-label">A2</span>
+                                        </div>
+                                        <div class="parking-spot available animate-pulse" style="--delay: 0.4s">
+                                            <i class="fas fa-square"></i>
+                                            <span class="spot-label">A3</span>
+                                        </div>
+                                    </div>
+                                    <div class="parking-row">
+                                        <div class="parking-spot occupied">
+                                            <i class="fas fa-motorcycle"></i>
+                                            <span class="spot-label">B1</span>
+                                        </div>
+                                        <div class="parking-spot available animate-pulse" style="--delay: 0.6s">
+                                            <i class="fas fa-square"></i>
+                                            <span class="spot-label">B2</span>
+                                        </div>
+                                        <div class="parking-spot reserved">
+                                            <i class="fas fa-clock"></i>
+                                            <span class="spot-label">B3</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Status Indicators -->
+                                <div class="parking-status-indicators">
+                                    <div class="status-item">
+                                        <div class="status-dot available"></div>
+                                        <span class="status-text">Tersedia</span>
+                                    </div>
+                                    <div class="status-item">
+                                        <div class="status-dot occupied"></div>
+                                        <span class="status-text">Terisi</span>
+                                    </div>
+                                    <div class="status-item">
+                                        <div class="status-dot reserved"></div>
+                                        <span class="status-text">Dipesan</span>
+                                    </div>
+                                </div>
+
+                                <!-- Real-time Stats -->
+                                <div class="parking-stats mt-4">
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <div class="stat-number text-success">3</div>
+                                            <div class="stat-label">Tersedia</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="stat-number text-danger">2</div>
+                                            <div class="stat-label">Terisi</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="stat-number text-warning">1</div>
+                                            <div class="stat-label">Dipesan</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-6 position-relative">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2 class="display-5 fw-bold mb-3 animate-fade-in">Mengapa Pilih SParking?</h2>
+                    <p class="lead text-white-50 animate-fade-in" style="--delay: 0.2s">
+                        Solusi parkir digital terdepan di Palembang
+                    </p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="glass-card animate-fade-in" style="--delay: 0.4s">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h4 class="mt-4 mb-3">Lokasi Strategis</h4>
+                        <p class="text-white-50 mb-0">10+ lokasi parkir premium di area strategis Palembang</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card animate-fade-in" style="--delay: 0.6s">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4 class="mt-4 mb-3">Real-time</h4>
+                        <p class="text-white-50 mb-0">Informasi ketersediaan parkir secara real-time</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card animate-fade-in" style="--delay: 0.8s">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4 class="mt-4 mb-3">Aman & Terpercaya</h4>
+                        <p class="text-white-50 mb-0">Sistem keamanan terjamin dan pembayaran yang aman</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-6 position-relative">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <div class="glass-card p-5 animate-fade-in">
+                        <h2 class="display-6 fw-bold mb-4">Tentang SParking</h2>
+                        <p class="lead text-white-50 mb-4">
+                            SParking adalah solusi parkir digital terdepan yang menghadirkan kemudahan dalam mencari dan memesan tempat parkir di Palembang. 
+                            Dengan teknologi real-time dan sistem pembayaran yang aman, kami membantu Anda menghemat waktu dan menghindari stress mencari parkir.
+                        </p>
+                        <div class="row g-4 mt-4">
+                            <div class="col-md-3">
+                                <div class="text-primary">
+                                    <i class="fas fa-users fa-2x mb-3"></i>
+                                    <h4 class="fw-bold">1000+</h4>
+                                    <p class="text-white-50 mb-0">Pengguna Aktif</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-primary">
+                                    <i class="fas fa-map-marker-alt fa-2x mb-3"></i>
+                                    <h4 class="fw-bold">10+</h4>
+                                    <p class="text-white-50 mb-0">Lokasi Strategis</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-primary">
+                                    <i class="fas fa-car fa-2x mb-3"></i>
+                                    <h4 class="fw-bold">500+</h4>
+                                    <p class="text-white-50 mb-0">Slot Parkir</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-primary">
+                                    <i class="fas fa-clock fa-2x mb-3"></i>
+                                    <h4 class="fw-bold">24/7</h4>
+                                    <p class="text-white-50 mb-0">Layanan</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Locations Section -->
+    <section id="locations" class="py-6 position-relative">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2 class="display-5 fw-bold mb-3 animate-fade-in">Lokasi Parkir</h2>
+                    <p class="lead text-white-50 animate-fade-in" style="--delay: 0.2s">
+                        Temukan lokasi parkir terdekat
+                    </p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="location-card animate-fade-in" style="--delay: 0.4s">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-university text-primary me-3 fa-2x"></i>
+                            <div>
+                                <h5 class="mb-1">UIN Raden Fatah</h5>
+                                <p class="text-white-50 mb-0">Kampus B Jakabaring</p>
+                            </div>
+                        </div>
+                        <div class="location-status available">
+                            <i class="fas fa-circle"></i> Tersedia
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="location-card animate-fade-in" style="--delay: 0.6s">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-shopping-bag text-primary me-3 fa-2x"></i>
+                            <div>
+                                <h5 class="mb-1">PTC Mall</h5>
+                                <p class="text-white-50 mb-0">Palembang Trade Center</p>
+                            </div>
+                        </div>
+                        <div class="location-status available">
+                            <i class="fas fa-circle"></i> Tersedia
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="location-card animate-fade-in" style="--delay: 0.8s">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-hospital text-primary me-3 fa-2x"></i>
+                            <div>
+                                <h5 class="mb-1">RS Charitas</h5>
+                                <p class="text-white-50 mb-0">Rumah Sakit Charitas</p>
+                            </div>
+                        </div>
+                        <div class="location-status limited">
+                            <i class="fas fa-circle"></i> Terbatas
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-6 position-relative">
+        <div class="container">
+            <div class="glass-card text-center p-5 animate-fade-in">
+                <h2 class="display-5 fw-bold mb-4">Siap Memulai?</h2>
+                <p class="lead text-white-50 mb-4">
+                    Bergabunglah dengan ribuan pengguna yang sudah merasakan kemudahan parkir digital
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="/register" class="btn btn-primary">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Daftar Sekarang
+                    </a>
+                    <a href="/login" class="btn btn-outline-light">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        Masuk
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-4">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-12">
+                    <h5 class="mb-3">SParking</h5>
+                    <p class="text-white-50 mb-3">Smart Parking Solution untuk Palembang</p>
+                    <div class="d-flex justify-content-center gap-3 mb-4">
+                        <a href="#" class="text-white-50 text-decoration-none">
+                            <i class="fab fa-facebook fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-white-50 text-decoration-none">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-white-50 text-decoration-none">
+                            <i class="fab fa-twitter fa-lg"></i>
+                        </a>
+                    </div>
+                    <p class="text-white-50 small mb-0">&copy; 2025 SParking. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
